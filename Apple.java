@@ -1,13 +1,10 @@
 import java.awt.Point;
-public class Apple{
-	protected Point position;
-	public Apple(Point position){
-		setPosition(position);
+public class Apple extends Food{
+	public Apple(Point position, double movement){
+		super(position, movement);
 	}
-	public void setPosition(Point position){
-		this.position = position;
-	}
-	public Point getPosition(){
-		return this.position;
+	public Apple()
+	{
+		this(new Point(50, 50), 1);
 	}
 }

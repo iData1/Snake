@@ -1,109 +1,234 @@
 import java.awt.event.*;
+
 import java.awt.Color;
+
 import java.awt.Point;
+
 import java.awt.Graphics;
+
 import javax.swing.JFrame;
+
 import java.util.*;
-public class SnakeGUI extends JFrame implements KeyListener {
+
+public class SnakeGUI extends JFrame implements KeyListener
+{
+
 	protected static Snake snake;
 
+
 	public static final int DISTANCE = snake.MOVEMENT;
-	public static final int OFFSET_SNAKE = 2;
-	public static final int OFFSET_FRUIT = 4;
+
+
 	public static final Color BACKGROUND_COLOR = Color.BLACK;
 
+
 	public static final Color PIECES_COLOR = Color.GREEN;
-	public static final Color HEAD_COLOR = Color.RED;
 
-	public static final Color FRUIT_COLOR = Color.WHITE;
+	public static final Color HEAD_COLOR = Color.GREEN;
 
-	public static final char UP = 'z';
-	public static final char DOWN = 'h';
-	public static final char RIGHT = 'j';
-	public static final char LEFT = 'g';
 
-	public long timer = 40;
+	public static final Color APPLE_COLOR = Color.GREEN;
 
-	public int width;
-	public int height;
+	public static final Color TRASH_COLOR = Color.YELLOW;
 
-	Point point;
+	public static final Color BOOM_COLOR = Color.BLUE;
 
-	public void paint(Graphics g){
-		if(getHeight() != snake.getMaxPositionY()){
-			snake.setMaxPositionY(getHeight() - (getHeight() % DISTANCE));
-		}
-		if(getWidth() != snake.getMaxPositionX()){
-			snake.setMaxPositionX(getWidth() - (getWidth() % DISTANCE));
-		}
+	public static final Color LONGFOOD_COLOR = Color.PINK;
+
+
+	public static final char UP = 'w';
+
+	public static final char DOWN = 's';
+
+	public static final char RIGHT = 'd';
+
+	public static final char LEFT = 'a';
+
+
+	public static long timer = 200;
+
+
+	public void paint(Graphics g)
+	{
+
 		g.setColor(BACKGROUND_COLOR);
+
 		g.fillRect(0,0,getWidth(),getHeight());
+
 		drawTail(g);
+
 		drawHead(g);
-		drawFruit(g);
-		point = new Point((int)snake.getPieces().get(0).getX(),(int)snake.getPieces().get(0).getY());
+
+		drawLine(g);
+
 
 	}
-	public void drawFruit(Graphics g){
-		g.setColor(FRUIT_COLOR);
+
+	public void drawLine(Graphics g)
+	{
+		g.setColor(Color.green);
+		for(int i = 0; i <= 900; i++)
+		{
+			g.drawLine(0, i * 10, getWidth(), i * 10);
+		}
+	}
+
+	public void drawApple(Graphics g)
+	{
+		g.setColor(APPLE_COLOR);
+
 		Point p = snake.apple.getPosition();
-		g.fillRect((int) p.getX() + OFFSET_FRUIT, (int) p.getY() + OFFSET_FRUIT, DISTANCE-OFFSET_FRUIT, DISTANCE-OFFSET_FRUIT);
+
+		g.fillRect((int) p.getX(), (int) p.getY(), DISTANCE, DISTANCE);
+
+
+	}
+
+	public void drawTrash(Graphics g)
+	{
+
+		g.setColor(TRASH_COLOR);
+
+		Point p = snake.apple.getPosition();
+
+		g.fillRect((int) p.getX(), (int) p.getY(), DISTANCE, DISTANCE);
+	}
+	public void drawBoom(Graphics g)
+	{
+
+		g.setColor(BOOM_COLOR);
+
+		Point p = snake.apple.getPosition();
+
+		g.fillRect((int) p.getX(), (int) p.getY(), DISTANCE, DISTANCE);
+	}
+	public void drawLongFood(Graphics g)
+	{
+
+		g.setColor(LONGFOOD_COLOR);
+
+		Point p = snake.apple.getPosition();
+
+		g.fillRect((int) p.getX(), (int) p.getY(), DISTANCE, DISTANCE);
 	}
 	/**
+
 	 * Metodo per stampare la coda dello snake
+
 	 * @param g graphics
+
 	 */
-	public void drawTail(Graphics g){
+
+	public void drawTail(Graphics g)
+	{
+
 		ArrayList<Point> pieces = snake.getPieces();
+
 		Point temp;
+
 		g.setColor(PIECES_COLOR);
-		for(int i = 0; i < pieces.size()-1; i++){
+
+		for(int i = 0; i < pieces.size()-1; i++)
+		{
+
 			temp = pieces.get(i);
-			g.fillRect((int) temp.getX() + OFFSET_SNAKE, (int) temp.getY() + OFFSET_SNAKE, DISTANCE-OFFSET_SNAKE, DISTANCE-OFFSET_SNAKE);
+
+			g.fillRect((int) temp.getX(), (int) temp.getY(), DISTANCE, DISTANCE);
+
 		}
+
+
 	}
+
 	/**
+
 	 * Metodo per stampare la testa dello snake
+
 	 * @param g graphics
+
 	 */
-	public void drawHead(Graphics g){
+
+	public void drawHead(Graphics g)
+	{
+
 		ArrayList<Point> pieces = snake.getPieces();
+
 		g.setColor(HEAD_COLOR);
+
 		Point temp = pieces.get(pieces.size()-1);
-		g.fillRect((int) temp.getX() + OFFSET_SNAKE, (int) temp.getY() + OFFSET_SNAKE, DISTANCE - OFFSET_SNAKE, DISTANCE-OFFSET_SNAKE);
+
+		g.drawRect((int) temp.getX(), (int) temp.getY(), DISTANCE, DISTANCE);
+
 	}
+
 	/**
+
 	 * Costruttore
+
 	 * @param title Titolo della finestra
+
 	 */
-	public SnakeGUI(String title) {
+
+	public SnakeGUI(String title)
+	{
+
 		super(title);
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		this.setSize(300, 300);
+
 		this.addKeyListener(this);
+
 		snake = new Snake(new Point(50,50));
-		point = new Point(-DISTANCE,-DISTANCE);
+
 	}
+
 	/**
+
 	 * Evento per quando viene premuto un tasto
+
 	 * @param e evento
+
 	 */
-	public void keyPressed(KeyEvent e){
-		if(e.getKeyChar() == UP){
+
+	public void keyPressed(KeyEvent e)
+	{
+
+		if(e.getKeyChar() == UP)
+		{
+
 			snake.setDirection(snake.UP);
+
 		}
-		else if(e.getKeyChar() == DOWN){
+
+		else if(e.getKeyChar() == DOWN)
+		{
+
 			snake.setDirection(snake.DOWN);
+
 		}
-		else if(e.getKeyChar() == RIGHT){
+
+		else if(e.getKeyChar() == RIGHT)
+		{
+
 			snake.setDirection(snake.RIGHT);
+
 		}
-		else if(e.getKeyChar() == LEFT){
+
+		else if(e.getKeyChar() == LEFT)
+		{
+
 			snake.setDirection(snake.LEFT);
+
 		}
+
 	}
+
 	public void keyTyped(KeyEvent e){
-	}
+}
+
 	public void keyReleased(KeyEvent e){
-	}
+}
+
 }
